@@ -9,7 +9,7 @@ const makeLevel = (notes, numberOfHoles) => {
   const holes = []
   while(holes.length < numberOfHoles){
     const randomHole = _.random(1, notes.length - 1)
-    if(!holes.includes(randomHole) && !holes.includes(randomHole - 1) && !holes.includes(randomHole + 1)){
+    if(!holes.includes(randomHole)){
       holes.push(randomHole)
       thisLevel[randomHole] = null
     }
@@ -25,13 +25,24 @@ const colorCycle = [
   'bg-lime-600'
 ]
 
+const invertLevel = (notes, startingLevel) => {
+  const invertedLevel = [...notes]
+  startingLevel.forEach((e, i, a) => {
+    if(!e){
+      invertedLevel[a.length - (1 + i)] = null
+    }
+  })
+  return invertedLevel
+}
+
 const generateSong = () => {
   const notes = exampleSong;
-  const firstLevel = makeLevel(notes, 1)
-  const secondLevel = makeLevel(notes, 3)
-  const thirdLevel = makeLevel(notes, 6)
+  const firstLevel = makeLevel(notes, 2)
+  const secondLevel = makeLevel(notes, 4)
+  const thirdLevel = makeLevel(notes, 8)
+  const fourthLevel = invertLevel(notes, thirdLevel)
 
-  const fullSong = [...notes, ...firstLevel, ...secondLevel, ...thirdLevel]
+  const fullSong = [...notes, ...firstLevel, ...secondLevel, ...thirdLevel, ...fourthLevel]
 
   return fullSong.map((n, i) => ({name: n, position: i}))
 }
@@ -81,6 +92,9 @@ function App() {
         </div>
         <div className="flex my-2">
           { songRow(songRef.current.slice(48, 64), position, isPlaying)}
+        </div>
+        <div className="flex my-2">
+          { songRow(songRef.current.slice(64, 80), position, isPlaying)}
         </div>
         <Song isPlaying={isPlaying} bpm={240} volume={0} isMuted={false}>
           <Track
