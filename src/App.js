@@ -1,8 +1,9 @@
 import './App.css';
-import { Song, Track, Instrument } from 'reactronica'
-import React, {useRef, useState} from "react";
+import {Song, Track, Instrument, Effect} from 'reactronica'
+import React, {useEffect, useRef, useState} from "react";
 import _ from "lodash";
 import {exampleSong} from "./songs";
+import {SongPlayer} from "./SongPlayer";
 
 const makeLevel = (notes, numberOfHoles) => {
   const thisLevel = [...notes]
@@ -10,6 +11,12 @@ const makeLevel = (notes, numberOfHoles) => {
   while(holes.length < numberOfHoles){
     const randomHole = _.random(1, notes.length - 1)
     if(!holes.includes(randomHole)){
+      if(holes.includes(randomHole - 1)){
+        if(holes.includes(randomHole - 2)){ continue }
+        if(holes.includes(randomHole + 1)){ continue }
+      } else if(holes.includes(randomHole + 1)){
+        if(holes.includes(randomHole + 2)){ continue }
+      }
       holes.push(randomHole)
       thisLevel[randomHole] = null
     }
@@ -37,12 +44,26 @@ const invertLevel = (notes, startingLevel) => {
 
 const generateSong = () => {
   const notes = exampleSong;
-  const firstLevel = makeLevel(notes, 2)
-  const secondLevel = makeLevel(notes, 4)
-  const thirdLevel = makeLevel(notes, 8)
-  const fourthLevel = invertLevel(notes, thirdLevel)
+  const shuffledNotes = _.shuffle([...notes])
 
-  const fullSong = [...notes, ...firstLevel, ...secondLevel, ...thirdLevel, ...fourthLevel]
+  const firstLevel = makeLevel(_.reverse([...notes]), 3)
+  const secondLevel = makeLevel(notes, 3)
+  const thirdLevel = makeLevel(shuffledNotes, 5)
+  const fourthLevel = makeLevel(notes, 6)
+  const fifthLevel = invertLevel(_.reverse([...notes]), fourthLevel)
+  const sixthLevel = makeLevel(notes, 4)
+  const seventhLevel = makeLevel(shuffledNotes, 8)
+
+  const fullSong = [
+      ...notes,
+      ...firstLevel,
+      ...secondLevel,
+      ...thirdLevel,
+      ...fourthLevel,
+      ...fifthLevel,
+      ...sixthLevel,
+      ...seventhLevel
+  ]
 
   return fullSong.map((n, i) => ({name: n, position: i}))
 }
@@ -65,53 +86,71 @@ const songRow = (songSlice, position, isPlaying) => (
 function App() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [position, setPosition] = useState(null)
+  const [userNotes, setUserNotes] = useState([])
   const songRef = useRef(generateSong())
 
-  const duration = .2
+  const duration = .12
 
   const startPlaying = () => {
     setPosition(0)
     setIsPlaying(true)
   }
 
+  const updatePosition = () => {
+    setPosition((lastPosition) => {
+      const newPosition = lastPosition + 1
+      if(newPosition >= songRef.current.length){
+        setTimeout(() => setIsPlaying(false), duration * 1000)
+        return newPosition
+      } else {
+        return newPosition
+      }
+    })
+  }
+
+  useEffect(() => {
+
+    document.addEventListener('keydown', userKeyDown);
+    document.addEventListener('keyup', userKeyUp);
+
+    return () => {
+      document.removeEventListener('keydown', userKeyDown);
+      document.removeEventListener('keyup', userKeyUp);
+    }
+  })
+
+  const userKeyDown = (event) => {
+    if(event.keyCode === 74 && isPlaying){
+      const currentNote = exampleSong[position % 16]
+      setUserNotes([{name: currentNote, duration, velocity: 1}])
+    }
+    if(event.keyCode === 75){
+      setUserNotes([{name: 'D4'}])
+    }
+  }
+
+  const userKeyUp = () => {
+    setUserNotes([])
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Będzie Synth Game</h1>
+      <h1>Rhythm Game</h1>
         <div className="my-10">
-          <button className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0" onClick={startPlaying}>Play</button>
+          <button className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed" onClick={startPlaying} disabled={isPlaying}>Play</button>
         </div>
-        <div className="flex my-2">
-          { songRow(songRef.current.slice(0, 16), position, isPlaying)}
-        </div>
-        <div className="flex my-2">
-          { songRow(songRef.current.slice(16, 32), position, isPlaying)}
-        </div>
-        <div className="flex my-2">
-          { songRow(songRef.current.slice(32, 48), position, isPlaying)}
-        </div>
-        <div className="flex my-2">
-          { songRow(songRef.current.slice(48, 64), position, isPlaying)}
-        </div>
-        <div className="flex my-2">
-          { songRow(songRef.current.slice(64, 80), position, isPlaying)}
-        </div>
-        <Song isPlaying={isPlaying} bpm={240} volume={0} isMuted={false}>
-          <Track
-              steps={songRef.current.map((n, i, a) => ({ ...n, duration: duration, velocity: 1}))}
-              onStepPlay={(step) => {
-                setPosition((lastPosition) => {
-                  const newPosition = lastPosition + 1
-                  if(newPosition >= songRef.current.length){
-                    setTimeout(() => setIsPlaying(false), duration * 1000)
-                    return newPosition
-                  } else {
-                    return newPosition
-                  }
-                })
-              }}
-          >
-            <Instrument type='synth'/>
+        {
+          [...Array(Math.floor(songRef.current.length / 16))].map((_, i) => (
+              <div className="flex my-2">
+                { songRow(songRef.current.slice(i * 16, (i+1)*16), position, isPlaying)}
+              </div>
+          ))
+        }
+        <SongPlayer isPlaying={isPlaying} updatePosition={updatePosition} song={songRef.current} />
+        <Song>
+          <Track>
+            <Instrument type="synth" notes={userNotes} />
           </Track>
         </Song>
       </header>
