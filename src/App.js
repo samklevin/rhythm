@@ -8,6 +8,7 @@ import {SongPlayer} from "./SongPlayer";
 const makeLevel = (notes, numberOfHoles) => {
   const thisLevel = [...notes]
   const holes = []
+  let iterations = 0
   while(holes.length < numberOfHoles){
     const randomHole = _.random(1, notes.length - 1)
     if(!holes.includes(randomHole)){
@@ -20,6 +21,8 @@ const makeLevel = (notes, numberOfHoles) => {
       holes.push(randomHole)
       thisLevel[randomHole] = null
     }
+    iterations++
+    if(iterations > notes.length * 2){ break }
   }
 
   return thisLevel
@@ -51,8 +54,8 @@ const generateSong = () => {
   const thirdLevel = makeLevel(shuffledNotes, 5)
   const fourthLevel = makeLevel(notes, 6)
   const fifthLevel = invertLevel(_.reverse([...notes]), fourthLevel)
-  const sixthLevel = makeLevel(notes, 4)
-  const seventhLevel = makeLevel(shuffledNotes, 8)
+  const sixthLevel = makeLevel(notes, 9)
+  const seventhLevel = invertLevel(shuffledNotes, sixthLevel)
 
   const fullSong = [
       ...notes,
