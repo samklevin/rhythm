@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rhythm/static/css/main.49ec7035.css",
+    "main.js": "/rhythm/static/js/main.b42c4f36.js",
+    "static/js/787.aa1c5f00.chunk.js": "/rhythm/static/js/787.aa1c5f00.chunk.js",
+    "index.html": "/rhythm/index.html",
+    "main.49ec7035.css.map": "/rhythm/static/css/main.49ec7035.css.map",
+    "main.b42c4f36.js.map": "/rhythm/static/js/main.b42c4f36.js.map",
+    "787.aa1c5f00.chunk.js.map": "/rhythm/static/js/787.aa1c5f00.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.49ec7035.css",
+    "static/js/main.b42c4f36.js"
+  ]
+}
