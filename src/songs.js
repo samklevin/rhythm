@@ -5,9 +5,9 @@ export const exampleSong = [
     'G2', 'B2', 'C3', 'E3'
 ]
 
-export const exampleBassLine = [
-        'C2', null, null, null,
-        'D2', null, null, null,
-        'G2', null, null, null,
-        'C2', null, null, null
-    ]
+export const secondSong = [
+    'C2', 'F2', 'A2', 'E3', 'A3',
+    'C2', 'F2', 'A2', 'D3', 'C4',
+    'C2', 'G#2', 'C3', 'D#3', 'G#4',
+    'C4'
+]
