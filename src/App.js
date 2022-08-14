@@ -9,6 +9,10 @@ const shiftUpTwoOctaves = (note) => (
     ))
 )
 
+const sixteenthDuration = (bpm) => (
+    bpm / (60 * 4)
+)
+
 const colorCycle = [
   'bg-red-600',
   'bg-blue-600',
@@ -45,6 +49,7 @@ function App() {
   const [tempo, setTempo] = useState(68)
   const [songIndex, setSongIndex] = useState(0)
   const [viewingResults, setViewingResults] = useState(false)
+  const [lockedAt, setLockedAt] = useState()
   const songRef = useRef(generateSong(songIndex))
   const synthRef = useRef()
 
@@ -72,6 +77,7 @@ function App() {
         updatePosition(n.time)
         if(i === a.length - 1){
           setIsPlaying(false)
+          setLockedAt(null)
           Tone.Transport.stop()
           setViewingResults(true)
         }
@@ -87,6 +93,18 @@ function App() {
   }, [songIndex])
 
   useEffect(() => {
+    if(!lockedAt){ return }
+    const currentSeconds = Tone.Transport.getSecondsAtTime(Tone.Transport.currentTime);
+    const lockedAtSeconds = Tone.Transport.getSecondsAtTime(lockedAt)
+
+    console.log('time dif', currentSeconds - lockedAtSeconds)
+    console.log('16th dur', sixteenthDuration(tempo))
+    if(currentSeconds - lockedAtSeconds > sixteenthDuration(tempo)){
+      setLockedAt(null)
+    }
+  }, [position])
+
+  useEffect(() => {
 
     document.addEventListener('keydown', userKeyDown);
 
@@ -98,6 +116,9 @@ function App() {
   const playerSynth = new Tone.PolySynth(Tone.Synth).toDestination();
 
   const userKeyDown = (event) => {
+    if(lockedAt){
+      return
+    }
     if(event.keyCode === 32 && isPlaying){
       const currentPosition = Tone.Transport.position.split('.')
       const position = currentPosition[0]
@@ -107,10 +128,13 @@ function App() {
       if(!currentNote.play && remainder < 800){
         playerSynth.triggerAttackRelease(shiftUpTwoOctaves(currentNote.note), '16n', now)
         setHits((prevHits) => [...prevHits, position])
+        setLockedAt(null)
       } else {
+        setLockedAt(now)
+        playerSynth.triggerAttack('A3', now)
         playerSynth.triggerAttack('Bb3', now)
         playerSynth.triggerAttack('B3', now)
-        playerSynth.triggerRelease(['Bb3', 'B3'], now + .1)
+        playerSynth.triggerRelease(['A3', 'Bb3', 'B3'], now + .1)
       }
     }
   }
