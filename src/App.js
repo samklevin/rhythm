@@ -44,6 +44,7 @@ function App() {
   const [hits, setHits] = useState([])
   const [tempo, setTempo] = useState(68)
   const [songIndex, setSongIndex] = useState(0)
+  const [viewingResults, setViewingResults] = useState(false)
   const songRef = useRef(generateSong(songIndex))
   const synthRef = useRef()
 
@@ -70,8 +71,9 @@ function App() {
       Tone.Transport.schedule(() => {
         updatePosition(n.time)
         if(i === a.length - 1){
-          // setIsPlaying(false)
-          // setSongIndex((prevIndex) => ((prevIndex + 1) % 2))
+          setIsPlaying(false)
+          Tone.Transport.stop()
+          setViewingResults(true)
         }
       }, n.time)
     })
@@ -93,7 +95,7 @@ function App() {
     }
   })
 
-  const playerSynth = new Tone.Synth().toDestination()
+  const playerSynth = new Tone.PolySynth(Tone.Synth).toDestination();
 
   const userKeyDown = (event) => {
     if(event.keyCode === 32 && isPlaying){
@@ -101,13 +103,15 @@ function App() {
       const position = currentPosition[0]
       const remainder = currentPosition[1]
       const currentNote = songRef.current.find(n => n.time === position)
+      const now = Tone.context.currentTime;
       if(!currentNote.play && remainder < 800){
-        playerSynth.triggerAttackRelease(shiftUpTwoOctaves(currentNote.note), '16n', Tone.context.currentTime)
+        playerSynth.triggerAttackRelease(shiftUpTwoOctaves(currentNote.note), '16n', now)
         setHits((prevHits) => [...prevHits, position])
+      } else {
+        playerSynth.triggerAttack('Bb3', now)
+        playerSynth.triggerAttack('B3', now)
+        playerSynth.triggerRelease(['Bb3', 'B3'], now + .1)
       }
-    }
-    if(event.keyCode === 75){
-      playerSynth.triggerAttackRelease("D5", '8n', Tone.context.currentTime);
     }
   }
 
@@ -122,24 +126,40 @@ function App() {
       }
   )
 
+  const playAgain = () => {
+    setHits([])
+    const newIndex = (songIndex + 1) % 2
+    setSongIndex(newIndex)
+    songRef.current = generateSong(newIndex)
+    setViewingResults(false)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
       <h1>Rhythm Game</h1>
-        <div className="my-10 flex w-full">
-          <div className="w-1/3 flex justify-center">
-            <button className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed" onClick={startPlaying} disabled={isPlaying}>Play</button>
-          </div>
-          <div className="w-1/3 flex justify-center space-x-2">
-            <button onClick={updateTempo(56)} className={`${ tempo === 56 ? 'bg-blue-900 text-white' : 'bg-blue-300 text-gray-800' } text-2xl p-4 `}>slow</button>
-            <button onClick={updateTempo(68)} className={`${ tempo === 68 ? 'bg-blue-900 text-white' : 'bg-blue-300 text-gray-800' } text-2xl p-4 `}>medium</button>
-            <button onClick={updateTempo(80)} className={`${ tempo === 80 ? 'bg-blue-900 text-white' : 'bg-blue-300 text-gray-800' } text-2xl p-4 `}>fast</button>
-          </div>
-          <div className="w-1/3 flex justify-center space-x-2">
-            <button onClick={updateSongIndex(0)} className={`${ songIndex === 0 ? 'bg-amber-800 text-white' : 'bg-amber-200 text-gray-800' } text-2xl p-4`}>sol</button>
-            <button onClick={updateSongIndex(1)} className={`${ songIndex === 1 ? 'bg-amber-800 text-white' : 'bg-amber-200 text-gray-800' } text-2xl p-4`}>lun</button>
-          </div>
-        </div>
+        { viewingResults ?
+            (
+            <div className="my-10 flex w-full justify-center">
+              <button className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed" onClick={playAgain} disabled={isPlaying}>Play again?</button>
+            </div>
+            ) : (
+                <div className="my-10 flex w-full">
+                  <div className="w-1/3 flex justify-center">
+                    <button className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed" onClick={startPlaying} disabled={isPlaying}>Play</button>
+                  </div>
+                  <div className="w-1/3 flex justify-center space-x-2">
+                    <button onClick={updateTempo(56)} className={`${ tempo === 56 ? 'bg-blue-900 text-white' : 'bg-blue-300 text-gray-800' } text-2xl p-4 `}>slow</button>
+                    <button onClick={updateTempo(68)} className={`${ tempo === 68 ? 'bg-blue-900 text-white' : 'bg-blue-300 text-gray-800' } text-2xl p-4 `}>medium</button>
+                    <button onClick={updateTempo(80)} className={`${ tempo === 80 ? 'bg-blue-900 text-white' : 'bg-blue-300 text-gray-800' } text-2xl p-4 `}>fast</button>
+                  </div>
+                  <div className="w-1/3 flex justify-center space-x-2">
+                    <button onClick={updateSongIndex(0)} className={`${ songIndex === 0 ? 'bg-amber-800 text-white' : 'bg-amber-200 text-gray-800' } text-2xl p-4`}>sol</button>
+                    <button onClick={updateSongIndex(1)} className={`${ songIndex === 1 ? 'bg-amber-800 text-white' : 'bg-amber-200 text-gray-800' } text-2xl p-4`}>lun</button>
+                  </div>
+                </div>
+            )
+        }
         {
           [...Array(Math.floor(songRef.current.length / 16))].map((_, i) => (
               <div key={`row-${ i }`} className="flex my-2">

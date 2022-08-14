@@ -106,5 +106,5 @@ export const generateSong = (track=0) => {
         firstTrack,
         secondTrack
     ]
-    return tracks[track]()
+    return tracks[track]().slice(0, 64)
 }
