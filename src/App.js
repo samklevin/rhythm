@@ -5,6 +5,7 @@ import { generateSong } from "./songMaker";
 import SongSynth from "./components/SongSynth";
 import PlayerSynth from "./components/PlayerSynth";
 import { sixteenthDuration } from "./musicUtils";
+import SongSettings from "./components/SongSettings";
 
 const colorCycle = [
   "bg-red-600",
@@ -82,13 +83,6 @@ function App() {
     }
   }, [position]);
 
-  const updateTempo = (tempo) => () => setTempo(tempo);
-
-  const updateSongIndex = (index) => () => {
-    setSongIndex(index);
-    songRef.current = generateSong(index);
-  };
-
   const playAgain = () => {
     setHits([]);
     const newIndex = (songIndex + 1) % 2;
@@ -112,71 +106,15 @@ function App() {
             </button>
           </div>
         ) : (
-          <div className="my-10 flex w-full">
-            <div className="w-1/3 flex justify-center">
-              <button
-                className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed"
-                onClick={startPlaying}
-                disabled={isPlaying}
-              >
-                Play
-              </button>
-            </div>
-            <div className="w-1/3 flex justify-center space-x-2">
-              <button
-                onClick={updateTempo(56)}
-                className={`${
-                  tempo === 56
-                    ? "bg-blue-900 text-white"
-                    : "bg-blue-300 text-gray-800"
-                } text-2xl p-4 `}
-              >
-                slow
-              </button>
-              <button
-                onClick={updateTempo(68)}
-                className={`${
-                  tempo === 68
-                    ? "bg-blue-900 text-white"
-                    : "bg-blue-300 text-gray-800"
-                } text-2xl p-4 `}
-              >
-                medium
-              </button>
-              <button
-                onClick={updateTempo(80)}
-                className={`${
-                  tempo === 80
-                    ? "bg-blue-900 text-white"
-                    : "bg-blue-300 text-gray-800"
-                } text-2xl p-4 `}
-              >
-                fast
-              </button>
-            </div>
-            <div className="w-1/3 flex justify-center space-x-2">
-              <button
-                onClick={updateSongIndex(0)}
-                className={`${
-                  songIndex === 0
-                    ? "bg-amber-800 text-white"
-                    : "bg-amber-200 text-gray-800"
-                } text-2xl p-4`}
-              >
-                sol
-              </button>
-              <button
-                onClick={updateSongIndex(1)}
-                className={`${
-                  songIndex === 1
-                    ? "bg-amber-800 text-white"
-                    : "bg-amber-200 text-gray-800"
-                } text-2xl p-4`}
-              >
-                lun
-              </button>
-            </div>
-          </div>
+          <SongSettings
+            tempo={tempo}
+            setTempo={setTempo}
+            songIndex={songIndex}
+            setSongIndex={setSongIndex}
+            songRef={songRef}
+            isPlaying={isPlaying}
+            startPlaying={startPlaying}
+          />
         )}
         {[...Array(Math.floor(songRef.current.length / 16))].map((_, i) => (
           <div key={`row-${i}`} className="flex my-2">
