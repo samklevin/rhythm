@@ -6,43 +6,7 @@ import SongSynth from "./components/SongSynth";
 import PlayerSynth from "./components/PlayerSynth";
 import { sixteenthDuration } from "./musicUtils";
 import SongSettings from "./components/SongSettings";
-
-const colorCycle = [
-  "bg-red-600",
-  "bg-blue-600",
-  "bg-fuchsia-600",
-  "bg-lime-600",
-];
-
-const songRow = (songSlice, position, isPlaying, hits) =>
-  songSlice.map((note, index) => {
-    if (note.play) {
-      return (
-        <div
-          key={`note-${note.position}`}
-          className={`mx-2 w-12 h-8 rounded ease-in ${colorCycle[index % 4]} ${
-            note.time === Tone.Transport.position.split(".")[0] &&
-            isPlaying &&
-            "scale-150"
-          }`}
-        />
-      );
-    } else if (hits.includes(note.time)) {
-      return (
-        <div
-          key={`note-${note.position}`}
-          className="mx-2 w-12 h-8 rounded ease-in bg-white animate-pulse"
-        />
-      );
-    } else {
-      return (
-        <div
-          key={`note-${note.position}`}
-          className={`mx-2 w-12 h-8 rounded ease-in `}
-        />
-      );
-    }
-  });
+import SongDisplay from "./components/SongDisplay";
 
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -116,16 +80,12 @@ function App() {
             startPlaying={startPlaying}
           />
         )}
-        {[...Array(Math.floor(songRef.current.length / 16))].map((_, i) => (
-          <div key={`row-${i}`} className="flex my-2">
-            {songRow(
-              songRef.current.slice(i * 16, (i + 1) * 16),
-              position,
-              isPlaying,
-              hits
-            )}
-          </div>
-        ))}
+        <SongDisplay
+          songRef={songRef}
+          isPlaying={isPlaying}
+          position={position}
+          hits={hits}
+        />
       </header>
       <SongSynth
         endSong={endSong}
