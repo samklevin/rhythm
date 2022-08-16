@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { exampleSong, secondSong } from "./songs";
+import { lun, sol } from "./songs";
 
 const makeLevel = (notes, numberOfHoles) => {
   const thisLevel = notes.slice();
@@ -50,22 +50,22 @@ const addTimeValues = (song) =>
     time: `${Math.floor(i / 16)}:${Math.floor((i % 16) / 4)}:${i % 4}`,
   }));
 
-const firstTrack = () => {
-  const notes = serializedNotes(exampleSong);
+const makeSong = (song) => {
+  const notes = serializedNotes(song);
 
-  const firstLevel = makeLevel(_.reverse(serializedNotes(exampleSong)), 3);
-  const secondLevel = makeLevel(serializedNotes(exampleSong), 5);
-  const thirdLevel = makeLevel(_.shuffle(serializedNotes(exampleSong)), 6);
-  const fourthLevel = makeLevel(serializedNotes(exampleSong), 6);
+  const firstLevel = makeLevel(_.reverse(serializedNotes(song)), 3);
+  const secondLevel = makeLevel(serializedNotes(song), 5);
+  const thirdLevel = makeLevel(_.shuffle(serializedNotes(song)), 6);
+  const fourthLevel = makeLevel(serializedNotes(song), 6);
   const fifthLevel = invertLevel(_.reverse([...notes]), fourthLevel);
-  const sixthLevel = makeLevel(serializedNotes(exampleSong), 9);
+  const sixthLevel = makeLevel(serializedNotes(song), 9);
   const seventhLevel = invertLevel(
-    _.shuffle(serializedNotes(exampleSong)),
+    _.shuffle(serializedNotes(song)),
     sixthLevel
   );
 
   let fullSong = [
-    ...serializedNotes(exampleSong),
+    ...serializedNotes(song),
     ...firstLevel,
     ...secondLevel,
     ...thirdLevel,
@@ -73,44 +73,14 @@ const firstTrack = () => {
     ...fifthLevel,
     ...sixthLevel,
     ...seventhLevel,
-    ..._.reverse(serializedNotes(exampleSong)),
+    ..._.reverse(serializedNotes(song)),
   ];
 
   fullSong = addTimeValues(fullSong).map((n, i) => ({ ...n, position: i }));
   return fullSong;
 };
 
-const secondTrack = () => {
-  const notes = serializedNotes(secondSong);
-
-  const firstLevel = makeLevel(_.reverse(serializedNotes(secondSong)), 3);
-  const secondLevel = makeLevel(serializedNotes(secondSong), 5);
-  const thirdLevel = makeLevel(_.shuffle(serializedNotes(secondSong)), 6);
-  const fourthLevel = makeLevel(serializedNotes(secondSong), 6);
-  const fifthLevel = invertLevel(_.reverse([...notes]), fourthLevel);
-  const sixthLevel = makeLevel(serializedNotes(secondSong), 9);
-  const seventhLevel = invertLevel(
-    _.shuffle(serializedNotes(secondSong)),
-    sixthLevel
-  );
-
-  let fullSong = [
-    ...serializedNotes(secondSong),
-    ...firstLevel,
-    ...secondLevel,
-    ...thirdLevel,
-    ...fourthLevel,
-    ...fifthLevel,
-    ...sixthLevel,
-    ...seventhLevel,
-    ..._.reverse(serializedNotes(secondSong)),
-  ];
-
-  fullSong = addTimeValues(fullSong).map((n, i) => ({ ...n, position: i }));
-  return fullSong;
-};
-
-export const generateSong = (track = 0) => {
-  const tracks = [firstTrack, secondTrack];
-  return tracks[track]();
+export const generateSong = (songIndex = 0) => {
+  const songs = [sol, lun];
+  return makeSong(songs[songIndex]);
 };
