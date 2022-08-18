@@ -57,9 +57,9 @@ function App() {
   };
 
   return (
-    <div className="App bg-green-200">
+    <div className="App bg-slate-900">
       <header className="App-header">
-        <h1 className="text-6xl text-green-800">Rhythm Game</h1>
+        <h1 className="text-6xl text-white">Rhythm Game</h1>
         {viewingResults ? (
           <div className="my-10 flex w-full justify-center">
             <button

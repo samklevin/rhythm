@@ -25,7 +25,7 @@ const DisplayRow = ({ songSlice, isPlaying, hits }) =>
       return (
         <div
           key={`note-${note.position}`}
-          className="mx-2 w-12 h-8 rounded ease-in bg-yellow-600 animate-pulse"
+          className="mx-2 w-12 h-8 rounded ease-in bg-white animate-pulse"
         />
       );
     } else {

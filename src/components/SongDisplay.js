@@ -2,7 +2,7 @@ import React from "react";
 import DisplayRow from "./DisplayRow";
 
 const SongDisplay = ({ songRef, position, isPlaying, hits }) => (
-  <div className="p-8 bg-white">
+  <div className="p-8 bg-slate-900">
     {[...Array(Math.floor(songRef.current.length / 16))].map((_, i) => (
       <div key={`row-${i}`} className="flex my-2">
         <DisplayRow
