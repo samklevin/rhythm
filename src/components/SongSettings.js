@@ -20,13 +20,14 @@ const SongSettings = ({
   return (
     <div className="my-10 flex w-full">
       <div className="w-1/3 flex justify-center">
-        <button
-          className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed"
-          onClick={startPlaying}
-          disabled={isPlaying}
-        >
-          Play
-        </button>
+        {!isPlaying && (
+          <button
+            className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed"
+            onClick={startPlaying}
+          >
+            Play
+          </button>
+        )}
       </div>
       <div className="w-1/3 flex justify-center space-x-2">
         <button
@@ -34,30 +35,30 @@ const SongSettings = ({
           className={`${
             tempo === 56
               ? "bg-blue-900 text-white"
-              : "bg-blue-300 text-gray-800"
+              : "bg-blue-200 text-gray-500"
           } text-2xl p-4 `}
         >
-          slow
+          normal
         </button>
         <button
           onClick={updateTempo(68)}
           className={`${
             tempo === 68
               ? "bg-blue-900 text-white"
-              : "bg-blue-300 text-gray-800"
+              : "bg-blue-200 text-gray-500"
           } text-2xl p-4 `}
         >
-          medium
+          fast
         </button>
         <button
           onClick={updateTempo(80)}
           className={`${
             tempo === 80
               ? "bg-blue-900 text-white"
-              : "bg-blue-300 text-gray-800"
+              : "bg-blue-200 text-gray-500"
           } text-2xl p-4 `}
         >
-          fast
+          mega
         </button>
       </div>
       <div className="w-1/3 flex justify-center space-x-2">

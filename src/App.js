@@ -12,7 +12,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(null);
   const [hits, setHits] = useState([]);
-  const [tempo, setTempo] = useState(68);
+  const [tempo, setTempo] = useState(56);
   const [songIndex, setSongIndex] = useState(0);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
@@ -48,17 +48,18 @@ function App() {
   }, [position]);
 
   const playAgain = () => {
-    setHits([]);
-    const newIndex = (songIndex + 1) % 2;
-    setSongIndex(newIndex);
-    songRef.current = generateSong(newIndex);
-    setViewingResults(false);
+    window.location.reload();
+    // setHits([]);
+    // const newIndex = (songIndex + 1) % 2;
+    // setSongIndex(newIndex);
+    // songRef.current = generateSong(newIndex);
+    // setViewingResults(false);
   };
 
   return (
-    <div className="App">
+    <div className="App bg-green-200">
       <header className="App-header">
-        <h1>Rhythm Game</h1>
+        <h1 className="text-6xl text-green-800">Rhythm Game</h1>
         {viewingResults ? (
           <div className="my-10 flex w-full justify-center">
             <button

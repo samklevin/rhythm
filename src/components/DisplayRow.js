@@ -8,7 +8,7 @@ const colorCycle = [
   "bg-lime-600",
 ];
 
-const SongRow = (songSlice, position, isPlaying, hits) =>
+const DisplayRow = ({ songSlice, isPlaying, hits }) =>
   songSlice.map((note, index) => {
     if (note.play) {
       return (
@@ -25,7 +25,7 @@ const SongRow = (songSlice, position, isPlaying, hits) =>
       return (
         <div
           key={`note-${note.position}`}
-          className="mx-2 w-12 h-8 rounded ease-in bg-white animate-pulse"
+          className="mx-2 w-12 h-8 rounded ease-in bg-yellow-600 animate-pulse"
         />
       );
     } else {
@@ -38,4 +38,4 @@ const SongRow = (songSlice, position, isPlaying, hits) =>
     }
   });
 
-export default SongRow;
+export default DisplayRow;
