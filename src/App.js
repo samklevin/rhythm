@@ -15,6 +15,7 @@ function App() {
   const [tempo, setTempo] = useState(56);
   const [songIndex, setSongIndex] = useState(0);
   const [viewingResults, setViewingResults] = useState(false);
+  const [ghostMode, setGhostMode] = useState(true);
   const [lockedAt, setLockedAt] = useState();
   const songRef = useRef(generateSong(songIndex));
 
@@ -31,6 +32,7 @@ function App() {
     setLockedAt(null);
     Tone.Transport.stop();
     setViewingResults(true);
+    setGhostMode(false);
   };
 
   useEffect(() => {
@@ -72,6 +74,8 @@ function App() {
           </div>
         ) : (
           <SongSettings
+            ghostMode={ghostMode}
+            setGhostMode={setGhostMode}
             tempo={tempo}
             setTempo={setTempo}
             songIndex={songIndex}
@@ -82,9 +86,9 @@ function App() {
           />
         )}
         <SongDisplay
+          ghostMode={ghostMode}
           songRef={songRef}
           isPlaying={isPlaying}
-          position={position}
           hits={hits}
         />
       </header>
