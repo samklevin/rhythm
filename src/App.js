@@ -15,7 +15,6 @@ function App() {
   const [tempo, setTempo] = useState(56);
   const [songIndex, setSongIndex] = useState(0);
   const [viewingResults, setViewingResults] = useState(false);
-  const [ghostMode, setGhostMode] = useState(true);
   const [lockedAt, setLockedAt] = useState();
   const songRef = useRef(generateSong(songIndex));
 
@@ -32,7 +31,6 @@ function App() {
     setLockedAt(null);
     Tone.Transport.stop();
     setViewingResults(true);
-    setGhostMode(false);
   };
 
   useEffect(() => {
@@ -51,11 +49,6 @@ function App() {
 
   const playAgain = () => {
     window.location.reload();
-    // setHits([]);
-    // const newIndex = (songIndex + 1) % 2;
-    // setSongIndex(newIndex);
-    // songRef.current = generateSong(newIndex);
-    // setViewingResults(false);
   };
 
   return (
@@ -74,8 +67,6 @@ function App() {
           </div>
         ) : (
           <SongSettings
-            ghostMode={ghostMode}
-            setGhostMode={setGhostMode}
             tempo={tempo}
             setTempo={setTempo}
             songIndex={songIndex}
@@ -85,12 +76,7 @@ function App() {
             startPlaying={startPlaying}
           />
         )}
-        <SongDisplay
-          ghostMode={ghostMode}
-          songRef={songRef}
-          isPlaying={isPlaying}
-          hits={hits}
-        />
+        <SongDisplay songRef={songRef} isPlaying={isPlaying} hits={hits} />
       </header>
       <SongSynth
         endSong={endSong}

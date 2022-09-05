@@ -3,8 +3,6 @@ import { generateSong } from "../songMaker";
 
 const SongSettings = ({
   isPlaying,
-  ghostMode,
-  setGhostMode,
   tempo,
   setTempo,
   songIndex,
@@ -21,7 +19,7 @@ const SongSettings = ({
 
   return (
     <div className="my-10 flex w-full">
-      <div className="w-1/4 flex justify-center">
+      <div className="w-1/3 flex justify-center">
         {!isPlaying && (
           <button
             className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed"
@@ -31,19 +29,7 @@ const SongSettings = ({
           </button>
         )}
       </div>
-      <div className="w-1/4 flex justify-center space-x-2">
-        <button
-          onClick={() => setGhostMode((prevMode) => !prevMode)}
-          className={`px-2 ${
-            ghostMode
-              ? "bg-zinc-300 text-blue-800"
-              : "bg-zinc-800 text-blue-100"
-          }`}
-        >
-          Ghost Mode
-        </button>
-      </div>
-      <div className="w-1/4 flex justify-center space-x-2">
+      <div className="w-1/3 flex justify-center space-x-2">
         <button
           onClick={updateTempo(56)}
           className={`${
@@ -75,7 +61,7 @@ const SongSettings = ({
           mega
         </button>
       </div>
-      <div className="w-1/4 flex justify-center space-x-2">
+      <div className="w-1/3 flex justify-center space-x-2">
         <button
           onClick={updateSongIndex(0)}
           className={`${
