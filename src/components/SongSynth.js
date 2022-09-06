@@ -5,19 +5,20 @@ const SongSynth = ({ endSong, setTransportTime, songIndex, songRef }) => {
   const synthRef = useRef();
 
   useEffect(() => {
-    if (synthRef.current) {
-      synthRef.current.dispose();
-    }
-    const songSynth = new Tone.Synth().toDestination();
-    synthRef.current = songSynth;
-    songSynth.volume.value = -12;
-    songRef.current.forEach((n, i, a) => {
+    const scheduleCallback = (n, i, a) => {
       Tone.Transport.schedule(() => {
         setTransportTime(n.time);
         if (i === a.length - 1) {
           endSong();
         }
       }, n.time);
+    };
+
+    const songSynth = new Tone.Synth().toDestination();
+    synthRef.current = songSynth;
+    songSynth.volume.value = -12;
+    songRef.current.forEach((n, i, a) => {
+      scheduleCallback(n, i, a);
     });
     new Tone.Part((time, value) => {
       if (value.play) {
