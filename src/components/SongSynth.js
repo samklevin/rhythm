@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as Tone from "tone";
 
-const SongSynth = ({ endSong, setPosition, songIndex, songRef }) => {
+const SongSynth = ({ endSong, setTransportTime, songIndex, songRef }) => {
   const synthRef = useRef();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const SongSynth = ({ endSong, setPosition, songIndex, songRef }) => {
     songSynth.volume.value = -12;
     songRef.current.forEach((n, i, a) => {
       Tone.Transport.schedule(() => {
-        setPosition(n.time);
+        setTransportTime(n.time);
         if (i === a.length - 1) {
           endSong();
         }

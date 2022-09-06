@@ -10,7 +10,7 @@ import SongDisplay from "./components/SongDisplay";
 
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [position, setPosition] = useState(null);
+  const [transportTime, setTransportTime] = useState(null);
   const [hits, setHits] = useState([]);
   const [tempo, setTempo] = useState(56);
   const [songIndex, setSongIndex] = useState(0);
@@ -19,7 +19,6 @@ function App() {
   const songRef = useRef(generateSong(songIndex));
 
   const startPlaying = async () => {
-    setPosition(0);
     setIsPlaying(true);
     await Tone.start();
     Tone.Transport.bpm.value = tempo;
@@ -45,7 +44,7 @@ function App() {
     if (currentSeconds - lockedAtSeconds > sixteenthDuration(tempo)) {
       setLockedAt(null);
     }
-  }, [position]);
+  }, [transportTime]);
 
   const playAgain = () => {
     window.location.reload();
@@ -80,7 +79,7 @@ function App() {
       </header>
       <SongSynth
         endSong={endSong}
-        setPosition={setPosition}
+        setTransportTime={setTransportTime}
         songIndex={songIndex}
         songRef={songRef}
       />
