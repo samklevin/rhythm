@@ -1,5 +1,7 @@
 import _ from "lodash";
-import { lun, sol } from "./songs";
+import { lun, mars, mercury, sol, venus } from "./songs";
+
+const SONGS = [lun, sol, mercury, venus, mars];
 
 const restWithinTwoPlaces = (rests, randomRest) => {
   if (rests.includes(randomRest - 1)) {
@@ -57,7 +59,7 @@ const addTimeValues = (song) =>
     time: `${Math.floor(i / 16)}:${Math.floor((i % 16) / 4)}:${i % 4}`,
   }));
 
-const makeSong = (song) => {
+export const makeSong = (song) => {
   const notes = serializedNotes(song);
 
   const firstLevel = insertRests(_.reverse(serializedNotes(song)), 3);
@@ -87,7 +89,14 @@ const makeSong = (song) => {
   return fullSong;
 };
 
-export const generateSong = (songIndex = 0) => {
-  const songs = [sol, lun];
-  return makeSong(songs[songIndex]);
+export const getTheme = (resolution) => {
+  const songsAtResolution = SONGS.filter((s) => s.length === resolution);
+  if (!songsAtResolution.length) {
+    throw `resolution ${resolution} is not supported`;
+  }
+  return _.shuffle(songsAtResolution)[0];
+};
+
+export const generateSong = (resolution = 16) => {
+  return makeSong(getTheme(resolution));
 };

@@ -35,3 +35,9 @@ export const lun = [
   "G#4",
   "C4",
 ];
+
+export const mercury = ["D3", "F3", "A3", "B3", "E3", "G3", "A3", "B3"];
+
+export const venus = ["C2", "E3", "D3", "A3", "A4", "D3", "E3", "G3"];
+
+export const mars = ["F#2", "C#2", "G#2", "D#2", "F3", "A#2", "D#2", "G#2"];

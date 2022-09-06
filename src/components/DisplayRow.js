@@ -8,13 +8,20 @@ const colorCycle = [
   "bg-lime-600",
 ];
 
-const DisplayRow = ({ songSlice, isPlaying, hits }) =>
+const widthFromResolution = {
+  8: "w-20",
+  16: "w-12",
+};
+
+const DisplayRow = ({ songSlice, isPlaying, hits, resolution }) =>
   songSlice.map((note, index) => {
     if (note.play) {
       return (
         <div
           key={`note-${note.position}`}
-          className={`mx-2 w-12 h-8 rounded ease-in ${colorCycle[index % 4]} ${
+          className={`mx-2 h-8 rounded ease-in ${
+            widthFromResolution[resolution]
+          } ${colorCycle[index % 4]} ${
             note.time === Tone.Transport.position.split(".")[0] &&
             isPlaying &&
             "scale-150"
@@ -25,14 +32,14 @@ const DisplayRow = ({ songSlice, isPlaying, hits }) =>
       return (
         <div
           key={`note-${note.position}`}
-          className="mx-2 w-12 h-8 rounded ease-in bg-white animate-pulse"
+          className={`mx-2 h-8 rounded ease-in bg-white animate-pulse ${widthFromResolution[resolution]}`}
         />
       );
     } else {
       return (
         <div
           key={`note-${note.position}`}
-          className={`mx-2 w-12 h-8 rounded ease-in `}
+          className={`mx-2 h-8 rounded ease-in ${widthFromResolution[resolution]}`}
         />
       );
     }

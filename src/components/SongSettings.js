@@ -5,15 +5,15 @@ const SongSettings = ({
   isPlaying,
   tempo,
   setTempo,
-  songIndex,
-  setSongIndex,
+  resolution,
+  setResolution,
   songRef,
   startPlaying,
 }) => {
   const updateTempo = (tempo) => () => setTempo(tempo);
 
   const updateSongIndex = (index) => () => {
-    setSongIndex(index);
+    setResolution(index);
     songRef.current = generateSong(index);
   };
 
@@ -63,24 +63,24 @@ const SongSettings = ({
       </div>
       <div className="w-1/3 flex justify-center space-x-2">
         <button
-          onClick={updateSongIndex(0)}
+          onClick={updateSongIndex(8)}
           className={`${
-            songIndex === 0
+            resolution === 8
               ? "bg-amber-800 text-white"
               : "bg-amber-200 text-gray-800"
           } text-2xl p-4`}
         >
-          sol
+          easy
         </button>
         <button
-          onClick={updateSongIndex(1)}
+          onClick={updateSongIndex(16)}
           className={`${
-            songIndex === 1
+            resolution === 16
               ? "bg-amber-800 text-white"
               : "bg-amber-200 text-gray-800"
           } text-2xl p-4`}
         >
-          lun
+          hard
         </button>
       </div>
     </div>

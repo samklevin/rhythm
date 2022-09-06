@@ -13,10 +13,10 @@ function App() {
   const [transportTime, setTransportTime] = useState(null);
   const [hits, setHits] = useState([]);
   const [tempo, setTempo] = useState(56);
-  const [songIndex, setSongIndex] = useState(0);
+  const [resolution, setResolution] = useState(8);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
-  const songRef = useRef(generateSong(songIndex));
+  const songRef = useRef(generateSong(resolution));
 
   const startPlaying = async () => {
     setIsPlaying(true);
@@ -68,19 +68,24 @@ function App() {
           <SongSettings
             tempo={tempo}
             setTempo={setTempo}
-            songIndex={songIndex}
-            setSongIndex={setSongIndex}
+            resolution={resolution}
+            setResolution={setResolution}
             songRef={songRef}
             isPlaying={isPlaying}
             startPlaying={startPlaying}
           />
         )}
-        <SongDisplay songRef={songRef} isPlaying={isPlaying} hits={hits} />
+        <SongDisplay
+          songRef={songRef}
+          isPlaying={isPlaying}
+          hits={hits}
+          resolution={resolution}
+        />
       </header>
       <SongSynth
         endSong={endSong}
         setTransportTime={setTransportTime}
-        songIndex={songIndex}
+        resolution={resolution}
         songRef={songRef}
       />
       {isPlaying && (

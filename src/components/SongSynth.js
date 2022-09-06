@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import * as Tone from "tone";
 
-const SongSynth = ({ endSong, setTransportTime, songIndex, songRef }) => {
+const SongSynth = ({ endSong, setTransportTime, resolution, songRef }) => {
   const synthRef = useRef();
 
   useEffect(() => {
+    if (synthRef.current) {
+      synthRef.current.dispose();
+    }
     const scheduleCallback = (n, i, a) => {
       Tone.Transport.schedule(() => {
         setTransportTime(n.time);
@@ -25,7 +28,7 @@ const SongSynth = ({ endSong, setTransportTime, songIndex, songRef }) => {
         songSynth.triggerAttackRelease(value.note, "16n", time);
       }
     }, songRef.current).start(0);
-  }, [songIndex]);
+  }, [resolution]);
 
   return <></>;
 };
