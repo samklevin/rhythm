@@ -13,6 +13,7 @@ const SongSynth = ({
   useEffect(() => {
     if (synthRef.current) {
       synthRef.current.dispose();
+      Tone.Transport.cancel();
     }
     const scheduleCallback = (n, i, a) => {
       Tone.Transport.schedule(() => {
@@ -26,6 +27,7 @@ const SongSynth = ({
     const songSynth = new Tone.Synth().toDestination();
     synthRef.current = songSynth;
     songSynth.volume.value = -12;
+    console.log(songRef.current);
     songRef.current.forEach((n, i, a) => {
       scheduleCallback(n, i, a);
     });
