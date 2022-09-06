@@ -59,15 +59,32 @@ const addTimeValues = (song) =>
     time: `${Math.floor(i / 16)}:${Math.floor((i % 16) / 4)}:${i % 4}`,
   }));
 
-export const makeSong = (song) => {
+const restsByResolutionAndDifficulty = {
+  8: {
+    0: 1,
+    1: 2,
+    2: 3,
+    3: 4,
+  },
+  16: {
+    0: 2,
+    1: 4,
+    2: 6,
+    3: 9,
+  },
+};
+
+export const makeSong = (song, difficulty) => {
+  const restCount = restsByResolutionAndDifficulty[song.length][difficulty];
+
   const notes = serializedNotes(song);
 
-  const firstLevel = insertRests(_.reverse(serializedNotes(song)), 3);
-  const secondLevel = insertRests(serializedNotes(song), 5);
-  const thirdLevel = insertRests(_.shuffle(serializedNotes(song)), 6);
-  const fourthLevel = insertRests(serializedNotes(song), 6);
+  const firstLevel = insertRests(_.reverse(serializedNotes(song)), restCount);
+  const secondLevel = insertRests(serializedNotes(song), restCount);
+  const thirdLevel = insertRests(_.shuffle(serializedNotes(song)), restCount);
+  const fourthLevel = insertRests(serializedNotes(song), restCount);
   const fifthLevel = reverseRests(_.reverse([...notes]), fourthLevel);
-  const sixthLevel = insertRests(serializedNotes(song), 9);
+  const sixthLevel = insertRests(serializedNotes(song), restCount);
   const seventhLevel = reverseRests(
     _.shuffle(serializedNotes(song)),
     sixthLevel
@@ -97,6 +114,6 @@ export const getTheme = (resolution) => {
   return _.shuffle(songsAtResolution)[0];
 };
 
-export const generateSong = (resolution = 16) => {
-  return makeSong(getTheme(resolution));
+export const generateSong = (resolution = 16, difficulty = 0) => {
+  return makeSong(getTheme(resolution), difficulty);
 };

@@ -1,7 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import * as Tone from "tone";
 
-const SongSynth = ({ endSong, setTransportTime, resolution, songRef }) => {
+const SongSynth = ({
+  endSong,
+  setTransportTime,
+  difficulty,
+  resolution,
+  songRef,
+}) => {
   const synthRef = useRef();
 
   useEffect(() => {
@@ -28,7 +34,7 @@ const SongSynth = ({ endSong, setTransportTime, resolution, songRef }) => {
         songSynth.triggerAttackRelease(value.note, "16n", time);
       }
     }, songRef.current).start(0);
-  }, [resolution]);
+  }, [resolution, difficulty]);
 
   return <></>;
 };

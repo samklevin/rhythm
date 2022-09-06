@@ -3,18 +3,21 @@ import { generateSong } from "../songMaker";
 
 const SongSettings = ({
   isPlaying,
-  tempo,
-  setTempo,
+  difficulty,
+  setDifficulty,
   resolution,
   setResolution,
-  songRef,
   startPlaying,
+  songRef,
 }) => {
-  const updateTempo = (tempo) => () => setTempo(tempo);
+  const updateDifficulty = (difficulty) => () => {
+    setDifficulty(difficulty);
+    songRef.current = generateSong(resolution, difficulty);
+  };
 
-  const updateSongIndex = (index) => () => {
-    setResolution(index);
-    songRef.current = generateSong(index);
+  const updateResolution = (resolution) => () => {
+    setResolution(resolution);
+    songRef.current = generateSong(resolution, difficulty);
   };
 
   return (
@@ -31,39 +34,49 @@ const SongSettings = ({
       </div>
       <div className="w-1/3 flex justify-center space-x-2">
         <button
-          onClick={updateTempo(56)}
+          onClick={updateDifficulty(0)}
           className={`${
-            tempo === 56
+            difficulty === 0
               ? "bg-blue-900 text-white"
               : "bg-blue-200 text-gray-500"
           } text-2xl p-4 `}
         >
-          normal
+          easy
         </button>
         <button
-          onClick={updateTempo(68)}
+          onClick={updateDifficulty(1)}
           className={`${
-            tempo === 68
+            difficulty === 1
               ? "bg-blue-900 text-white"
               : "bg-blue-200 text-gray-500"
           } text-2xl p-4 `}
         >
-          fast
+          medium
         </button>
         <button
-          onClick={updateTempo(80)}
+          onClick={updateDifficulty(2)}
           className={`${
-            tempo === 80
+            difficulty === 2
               ? "bg-blue-900 text-white"
               : "bg-blue-200 text-gray-500"
           } text-2xl p-4 `}
         >
-          mega
+          hard
+        </button>
+        <button
+          onClick={updateDifficulty(3)}
+          className={`${
+            difficulty === 3
+              ? "bg-blue-900 text-white"
+              : "bg-blue-200 text-gray-500"
+          } text-2xl p-4 `}
+        >
+          really hard
         </button>
       </div>
       <div className="w-1/3 flex justify-center space-x-2">
         <button
-          onClick={updateSongIndex(8)}
+          onClick={updateResolution(8)}
           className={`${
             resolution === 8
               ? "bg-amber-800 text-white"
@@ -73,7 +86,7 @@ const SongSettings = ({
           easy
         </button>
         <button
-          onClick={updateSongIndex(16)}
+          onClick={updateResolution(16)}
           className={`${
             resolution === 16
               ? "bg-amber-800 text-white"

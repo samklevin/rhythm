@@ -8,11 +8,18 @@ import { sixteenthDuration } from "./musicUtils";
 import SongSettings from "./components/SongSettings";
 import SongDisplay from "./components/SongDisplay";
 
+const difficultyToTempo = {
+  0: 56,
+  1: 62,
+  2: 68,
+  3: 74,
+};
+
 function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [transportTime, setTransportTime] = useState(null);
   const [hits, setHits] = useState([]);
-  const [tempo, setTempo] = useState(56);
+  const [difficulty, setDifficulty] = useState(0);
   const [resolution, setResolution] = useState(8);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
@@ -21,7 +28,7 @@ function App() {
   const startPlaying = async () => {
     setIsPlaying(true);
     await Tone.start();
-    Tone.Transport.bpm.value = tempo;
+    Tone.Transport.bpm.value = difficultyToTempo[difficulty];
     Tone.Transport.start();
   };
 
@@ -41,7 +48,10 @@ function App() {
     );
     const lockedAtSeconds = Tone.Transport.getSecondsAtTime(lockedAt);
 
-    if (currentSeconds - lockedAtSeconds > sixteenthDuration(tempo)) {
+    if (
+      currentSeconds - lockedAtSeconds >
+      sixteenthDuration(difficultyToTempo[difficulty])
+    ) {
       setLockedAt(null);
     }
   }, [transportTime]);
@@ -66,13 +76,13 @@ function App() {
           </div>
         ) : (
           <SongSettings
-            tempo={tempo}
-            setTempo={setTempo}
+            difficulty={difficulty}
+            setDifficulty={setDifficulty}
             resolution={resolution}
             setResolution={setResolution}
-            songRef={songRef}
             isPlaying={isPlaying}
             startPlaying={startPlaying}
+            songRef={songRef}
           />
         )}
         <SongDisplay
@@ -86,6 +96,7 @@ function App() {
         endSong={endSong}
         setTransportTime={setTransportTime}
         resolution={resolution}
+        difficulty={difficulty}
         songRef={songRef}
       />
       {isPlaying && (
