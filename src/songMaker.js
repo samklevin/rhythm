@@ -1,34 +1,34 @@
 import _ from "lodash";
 import { lun, sol } from "./songs";
 
-const holeWithinTwoPlaces = (holes, randomHole) => {
-  if (holes.includes(randomHole - 1)) {
-    if (holes.includes(randomHole - 2)) {
+const restWithinTwoPlaces = (rests, randomRest) => {
+  if (rests.includes(randomRest - 1)) {
+    if (rests.includes(randomRest - 2)) {
       return true;
     }
-    if (holes.includes(randomHole + 1)) {
+    if (rests.includes(randomRest + 1)) {
       return true;
     }
-  } else if (holes.includes(randomHole + 1)) {
-    if (holes.includes(randomHole + 2)) {
+  } else if (rests.includes(randomRest + 1)) {
+    if (rests.includes(randomRest + 2)) {
       return true;
     }
   }
   return false;
 };
 
-const insertRests = (notes, numberOfHoles) => {
+const insertRests = (notes, numberOfRests) => {
   const thisLevel = notes.slice();
-  const holes = [];
+  const rests = [];
   let iterations = 0;
-  while (holes.length < numberOfHoles) {
-    const randomHole = _.random(1, notes.length - 1);
-    if (!holes.includes(randomHole)) {
-      if (holeWithinTwoPlaces(holes, randomHole)) {
+  while (rests.length < numberOfRests) {
+    const randomRest = _.random(1, notes.length - 1);
+    if (!rests.includes(randomRest)) {
+      if (restWithinTwoPlaces(rests, randomRest)) {
         continue;
       }
-      holes.push(randomHole);
-      thisLevel[randomHole].play = false;
+      rests.push(randomRest);
+      thisLevel[randomRest].play = false;
     }
     iterations++;
     if (iterations > notes.length * 2) {
@@ -41,7 +41,7 @@ const insertRests = (notes, numberOfHoles) => {
 
 const serializedNotes = (song) => song.map((n) => ({ note: n, play: true }));
 
-const reverseLevel = (notes, startingLevel) => {
+const reverseRests = (notes, startingLevel) => {
   const invertedLevel = [...notes];
   startingLevel.forEach((e, i, a) => {
     if (e.play === false) {
@@ -64,9 +64,9 @@ const makeSong = (song) => {
   const secondLevel = insertRests(serializedNotes(song), 5);
   const thirdLevel = insertRests(_.shuffle(serializedNotes(song)), 6);
   const fourthLevel = insertRests(serializedNotes(song), 6);
-  const fifthLevel = reverseLevel(_.reverse([...notes]), fourthLevel);
+  const fifthLevel = reverseRests(_.reverse([...notes]), fourthLevel);
   const sixthLevel = insertRests(serializedNotes(song), 9);
-  const seventhLevel = reverseLevel(
+  const seventhLevel = reverseRests(
     _.shuffle(serializedNotes(song)),
     sixthLevel
   );
