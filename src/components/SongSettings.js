@@ -83,7 +83,7 @@ const SongSettings = ({
               : "bg-amber-200 text-gray-800"
           } text-2xl p-4`}
         >
-          easy
+          lil
         </button>
         <button
           onClick={updateResolution(16)}
@@ -93,7 +93,7 @@ const SongSettings = ({
               : "bg-amber-200 text-gray-800"
           } text-2xl p-4`}
         >
-          hard
+          big
         </button>
       </div>
     </div>

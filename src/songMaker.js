@@ -74,20 +74,55 @@ const restsByResolutionAndDifficulty = {
   },
 };
 
+const repeatProbabilityByDifficulty = {
+  0: 0.6,
+  1: 0.4,
+  2: 0.3,
+  3: 0.1,
+};
+
 export const makeSong = (song, difficulty) => {
   const restCount = restsByResolutionAndDifficulty[song.length][difficulty];
+  const shouldRepeat = repeatProbabilityByDifficulty[difficulty];
+  let repeatCount = 0;
+
+  const newOrRepeat = (lastLevel, nextLevel) => {
+    if (_.random() < shouldRepeat && repeatCount < 2) {
+      repeatCount += 1;
+      return lastLevel;
+    }
+    repeatCount = 0;
+    return nextLevel;
+  };
 
   const notes = serializedNotes(song);
 
   const firstLevel = insertRests(_.reverse(serializedNotes(song)), restCount);
-  const secondLevel = insertRests(serializedNotes(song), restCount);
-  const thirdLevel = insertRests(_.shuffle(serializedNotes(song)), restCount);
-  const fourthLevel = insertRests(serializedNotes(song), restCount);
-  const fifthLevel = reverseRests(_.reverse([...notes]), fourthLevel);
-  const sixthLevel = insertRests(serializedNotes(song), restCount);
-  const seventhLevel = reverseRests(
-    _.shuffle(serializedNotes(song)),
-    sixthLevel
+  const secondLevel = newOrRepeat(
+    firstLevel,
+    insertRests(serializedNotes(song), restCount)
+  );
+  const thirdLevel = newOrRepeat(
+    secondLevel,
+    insertRests(_.shuffle(serializedNotes(song)), restCount)
+  );
+  const fourthLevel = newOrRepeat(
+    thirdLevel,
+    insertRests(serializedNotes(song), restCount)
+  );
+  const fifthLevel = newOrRepeat(
+    fourthLevel,
+    reverseRests(_.reverse([...notes]), fourthLevel)
+  );
+
+  const sixthLevel = newOrRepeat(
+    fifthLevel,
+    insertRests(serializedNotes(song), restCount)
+  );
+
+  const seventhLevel = newOrRepeat(
+    sixthLevel,
+    reverseRests(_.shuffle(serializedNotes(song)), sixthLevel)
   );
 
   let fullSong = [
