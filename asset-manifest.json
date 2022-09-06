@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/rhythm/static/css/main.ff1e87db.css",
-    "main.js": "/rhythm/static/js/main.31162de7.js",
+    "main.css": "/rhythm/static/css/main.7d64d44e.css",
+    "main.js": "/rhythm/static/js/main.74e1d25f.js",
     "static/js/787.aa1c5f00.chunk.js": "/rhythm/static/js/787.aa1c5f00.chunk.js",
     "index.html": "/rhythm/index.html",
-    "main.ff1e87db.css.map": "/rhythm/static/css/main.ff1e87db.css.map",
-    "main.31162de7.js.map": "/rhythm/static/js/main.31162de7.js.map",
+    "main.7d64d44e.css.map": "/rhythm/static/css/main.7d64d44e.css.map",
+    "main.74e1d25f.js.map": "/rhythm/static/js/main.74e1d25f.js.map",
     "787.aa1c5f00.chunk.js.map": "/rhythm/static/js/787.aa1c5f00.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ff1e87db.css",
-    "static/js/main.31162de7.js"
+    "static/css/main.7d64d44e.css",
+    "static/js/main.74e1d25f.js"
   ]
 }
