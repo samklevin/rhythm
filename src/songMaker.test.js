@@ -23,45 +23,45 @@ describe("songMaker", () => {
   describe("makeSong", () => {
     describe("rests based on difficulty, resolution and level count", () => {
       it("returns 7 rests for difficulty 0, resolution 8 and default levelCount", () => {
-        const song = makeSong({ theme: mercury, difficulty: 0 });
+        const song = makeSong({ resolution: 8, difficulty: 0 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBe(7);
       });
 
       it("returns 14 rests for difficulty 1, resolution 8 and default levelCount", () => {
-        const song = makeSong({ theme: mercury, difficulty: 1 });
+        const song = makeSong({ resolution: 8, difficulty: 1 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBe(14);
       });
       it("returns 21 rests for difficulty 2, resolution 8 and default levelCount", () => {
-        const song = makeSong({ theme: mercury, difficulty: 2 });
+        const song = makeSong({ resolution: 8, difficulty: 2 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBe(21);
       });
       it("returns 28 rests for difficulty 3, resolution 8 and default levelCount", () => {
-        const song = makeSong({ theme: mercury, difficulty: 3 });
+        const song = makeSong({ resolution: 8, difficulty: 3 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBe(28);
       });
 
       it("returns 14 rests for difficulty 0, resolution 16and default levelCount ", () => {
-        const song = makeSong({ theme: sol, difficulty: 0 });
+        const song = makeSong({ resolution: 16, difficulty: 0 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBe(14);
       });
 
       it("returns 28 rests for difficulty 1, resolution 16and default levelCount ", () => {
-        const song = makeSong({ theme: sol, difficulty: 1 });
+        const song = makeSong({ resolution: 16, difficulty: 1 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBe(28);
       });
       it("returns 42 rests for difficulty 2, resolution 16and default levelCount ", () => {
-        const song = makeSong({ theme: sol, difficulty: 2 });
+        const song = makeSong({ resolution: 16, difficulty: 2 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBe(42);
       });
       it("returns 56 rests for difficulty 3, resolution 16and default levelCount ", () => {
-        const song = makeSong({ theme: sol, difficulty: 3 });
+        const song = makeSong({ resolution: 16, difficulty: 3 });
         const results = song.filter((n) => !n.play);
         expect(results.length).toBeGreaterThanOrEqual(56);
       });

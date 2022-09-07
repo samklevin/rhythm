@@ -83,7 +83,12 @@ const repeatProbabilityByDifficulty = {
 
 const MAX_LEVEL_REPEATS = 2;
 
-export const makeSong = ({ theme, difficulty, levelCount = 7 }) => {
+export const makeSong = ({
+  resolution = 8,
+  difficulty = 0,
+  levelCount = 7,
+}) => {
+  const theme = getTheme(resolution);
   const restCount = restsByResolutionAndDifficulty[theme.length][difficulty];
   const shouldRepeat = repeatProbabilityByDifficulty[difficulty];
   let repeatCount = MAX_LEVEL_REPEATS;
@@ -140,12 +145,4 @@ export const getTheme = (resolution) => {
     throw `resolution ${resolution} is not supported`;
   }
   return _.shuffle(songsAtResolution)[0];
-};
-
-export const generateSong = (
-  resolution = 16,
-  difficulty = 0,
-  levelCount = 7
-) => {
-  return makeSong({ theme: getTheme(resolution), difficulty, levelCount });
 };

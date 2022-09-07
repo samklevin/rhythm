@@ -1,7 +1,7 @@
 import "./App.css";
 import React, { useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
-import { generateSong } from "./songMaker";
+import { makeSong } from "./songMaker";
 import SongSynth from "./components/SongSynth";
 import PlayerSynth from "./components/PlayerSynth";
 import { sixteenthDuration } from "./musicUtils";
@@ -25,7 +25,7 @@ function App() {
   const [tone, setTone] = useState(0);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
-  const songRef = useRef(generateSong(resolution, difficulty));
+  const songRef = useRef(makeSong(resolution, difficulty));
 
   const startPlaying = async () => {
     setIsPlaying(true);

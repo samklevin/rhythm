@@ -1,5 +1,5 @@
 import React from "react";
-import { generateSong } from "../songMaker";
+import { makeSong } from "../songMaker";
 
 const SongSettings = ({
   isPlaying,
@@ -16,17 +16,17 @@ const SongSettings = ({
 }) => {
   const updateDifficulty = (difficulty) => () => {
     setDifficulty(difficulty);
-    songRef.current = generateSong(resolution, difficulty, levelCount);
+    songRef.current = makeSong(resolution, difficulty, levelCount);
   };
 
   const updateResolution = (resolution) => () => {
     setResolution(resolution);
-    songRef.current = generateSong(resolution, difficulty, levelCount);
+    songRef.current = makeSong(resolution, difficulty, levelCount);
   };
 
   const updateLevelCount = (levelCount) => () => {
     setLevelCount(levelCount);
-    songRef.current = generateSong(resolution, difficulty, levelCount);
+    songRef.current = makeSong(resolution, difficulty, levelCount);
   };
 
   return (
