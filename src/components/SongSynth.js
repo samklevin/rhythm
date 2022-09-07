@@ -7,6 +7,7 @@ const SongSynth = ({
   difficulty,
   resolution,
   songRef,
+  levelCount,
 }) => {
   const synthRef = useRef();
 
@@ -35,7 +36,7 @@ const SongSynth = ({
         songSynth.triggerAttackRelease(value.note, "16n", time);
       }
     }, songRef.current).start(0);
-  }, [resolution, difficulty]);
+  }, [resolution, difficulty, levelCount]);
 
   return <></>;
 };

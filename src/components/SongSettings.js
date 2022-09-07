@@ -9,6 +9,8 @@ const SongSettings = ({
   setResolution,
   levelCount,
   setLevelCount,
+  tone,
+  setTone,
   startPlaying,
   songRef,
 }) => {
@@ -104,36 +106,60 @@ const SongSettings = ({
         </button>
       </div>
 
-      <div className="w-1/4 flex justify-center items-center">
-        <div
-          onClick={updateLevelCount(5)}
-          className={`px-2 h-10 mx-1 cursor-pointer ${
-            levelCount === 5
-              ? "bg-green-800 text-white"
-              : "bg-green-100 text-green-800"
-          }`}
-        >
-          5
+      <div className="w-1/4">
+        <div className="flex justify-center items-center my-2">
+          <div
+            onClick={updateLevelCount(5)}
+            className={`px-2 h-10 mx-1 cursor-pointer ${
+              levelCount === 5
+                ? "bg-green-800 text-white"
+                : "bg-green-100 text-green-800"
+            }`}
+          >
+            5
+          </div>
+          <div
+            onClick={updateLevelCount(7)}
+            className={`px-2 h-10 mx-1 cursor-pointer ${
+              levelCount === 7
+                ? "bg-green-800 text-white"
+                : "bg-green-100 text-green-800"
+            }`}
+          >
+            7
+          </div>
+          <div
+            onClick={updateLevelCount(9)}
+            className={`px-2 h-10 mx-1 cursor-pointer ${
+              levelCount === 9
+                ? "bg-green-800 text-white"
+                : "bg-green-100 text-green-800"
+            }`}
+          >
+            9
+          </div>
         </div>
-        <div
-          onClick={updateLevelCount(7)}
-          className={`px-2 h-10 mx-1 cursor-pointer ${
-            levelCount === 7
-              ? "bg-green-800 text-white"
-              : "bg-green-100 text-green-800"
-          }`}
-        >
-          7
-        </div>
-        <div
-          onClick={updateLevelCount(9)}
-          className={`px-2 h-10 mx-1 cursor-pointer ${
-            levelCount === 9
-              ? "bg-green-800 text-white"
-              : "bg-green-100 text-green-800"
-          }`}
-        >
-          9
+        <div className="flex justify-center my-2">
+          <div
+            onClick={() => setTone(0)}
+            className={`px-2 mx-1 h-10 cursor-pointer ${
+              tone === 0
+                ? "bg-fuchsia-800 text-white"
+                : "bg-fuchsia-100 text-fuchsia-800"
+            }`}
+          >
+            bell
+          </div>
+          <div
+            onClick={() => setTone(1)}
+            className={`px-2 mx-1 h-10 cursor-pointer ${
+              tone === 1
+                ? "bg-fuchsia-800 text-white"
+                : "bg-fuchsia-100 text-fuchsia-800"
+            }`}
+          >
+            no bell
+          </div>
         </div>
       </div>
     </div>

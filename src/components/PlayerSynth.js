@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as Tone from "tone";
 import { shiftUpTwoOctaves } from "../musicUtils";
 
-const PlayerSynth = ({ lockedAt, setLockedAt, setHits, songRef }) => {
+const PlayerSynth = ({ lockedAt, setLockedAt, setHits, songRef, tone }) => {
   useEffect(() => {
     document.addEventListener("keydown", userKeyDown);
 
@@ -21,7 +21,8 @@ const PlayerSynth = ({ lockedAt, setLockedAt, setHits, songRef }) => {
   };
 
   const playHit = (now, note) => {
-    playerSynth.triggerAttackRelease(shiftUpTwoOctaves(note), "16n", now);
+    const nextNote = tone === 0 ? shiftUpTwoOctaves(note) : note;
+    playerSynth.triggerAttackRelease(nextNote, "16n", now);
   };
 
   const userKeyDown = (event) => {

@@ -22,6 +22,7 @@ function App() {
   const [difficulty, setDifficulty] = useState(0);
   const [resolution, setResolution] = useState(8);
   const [levelCount, setLevelCount] = useState(7);
+  const [tone, setTone] = useState(0);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
   const songRef = useRef(generateSong(resolution, difficulty));
@@ -83,6 +84,8 @@ function App() {
             setResolution={setResolution}
             levelCount={levelCount}
             setLevelCount={setLevelCount}
+            tone={tone}
+            setTone={setTone}
             isPlaying={isPlaying}
             startPlaying={startPlaying}
             songRef={songRef}
@@ -101,6 +104,7 @@ function App() {
         resolution={resolution}
         difficulty={difficulty}
         songRef={songRef}
+        levelCount={levelCount}
       />
       {isPlaying && (
         <PlayerSynth
@@ -108,6 +112,7 @@ function App() {
           setLockedAt={setLockedAt}
           setHits={setHits}
           songRef={songRef}
+          tone={tone}
         />
       )}
     </div>
