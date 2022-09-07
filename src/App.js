@@ -21,6 +21,7 @@ function App() {
   const [hits, setHits] = useState([]);
   const [difficulty, setDifficulty] = useState(0);
   const [resolution, setResolution] = useState(8);
+  const [levelCount, setLevelCount] = useState(7);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
   const songRef = useRef(generateSong(resolution, difficulty));
@@ -80,6 +81,8 @@ function App() {
             setDifficulty={setDifficulty}
             resolution={resolution}
             setResolution={setResolution}
+            levelCount={levelCount}
+            setLevelCount={setLevelCount}
             isPlaying={isPlaying}
             startPlaying={startPlaying}
             songRef={songRef}

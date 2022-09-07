@@ -144,6 +144,10 @@ export const getTheme = (resolution) => {
   return _.shuffle(songsAtResolution)[0];
 };
 
-export const generateSong = (resolution = 16, difficulty = 0) => {
-  return makeSong(getTheme(resolution), difficulty);
+export const generateSong = (
+  resolution = 16,
+  difficulty = 0,
+  levelCount = 7
+) => {
+  return makeSong(getTheme(resolution), difficulty, levelCount);
 };

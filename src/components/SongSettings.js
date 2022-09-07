@@ -7,22 +7,29 @@ const SongSettings = ({
   setDifficulty,
   resolution,
   setResolution,
+  levelCount,
+  setLevelCount,
   startPlaying,
   songRef,
 }) => {
   const updateDifficulty = (difficulty) => () => {
     setDifficulty(difficulty);
-    songRef.current = generateSong(resolution, difficulty);
+    songRef.current = generateSong(resolution, difficulty, levelCount);
   };
 
   const updateResolution = (resolution) => () => {
     setResolution(resolution);
-    songRef.current = generateSong(resolution, difficulty);
+    songRef.current = generateSong(resolution, difficulty, levelCount);
+  };
+
+  const updateLevelCount = (levelCount) => () => {
+    setLevelCount(levelCount);
+    songRef.current = generateSong(resolution, difficulty, levelCount);
   };
 
   return (
     <div className="my-10 flex w-full">
-      <div className="w-1/3 flex justify-center">
+      <div className="w-1/4 flex justify-center">
         {!isPlaying && (
           <button
             className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed"
@@ -32,7 +39,7 @@ const SongSettings = ({
           </button>
         )}
       </div>
-      <div className="w-1/3 flex justify-center space-x-2">
+      <div className="w-1/4 flex justify-center space-x-2">
         <button
           onClick={updateDifficulty(0)}
           className={`${
@@ -74,7 +81,7 @@ const SongSettings = ({
           really hard
         </button>
       </div>
-      <div className="w-1/3 flex justify-center space-x-2">
+      <div className="w-1/4 flex justify-center space-x-2">
         <button
           onClick={updateResolution(8)}
           className={`${
@@ -95,6 +102,39 @@ const SongSettings = ({
         >
           big
         </button>
+      </div>
+
+      <div className="w-1/4 flex justify-center items-center">
+        <div
+          onClick={updateLevelCount(5)}
+          className={`px-2 h-10 mx-1 cursor-pointer ${
+            levelCount === 5
+              ? "bg-green-800 text-white"
+              : "bg-green-100 text-green-800"
+          }`}
+        >
+          5
+        </div>
+        <div
+          onClick={updateLevelCount(7)}
+          className={`px-2 h-10 mx-1 cursor-pointer ${
+            levelCount === 7
+              ? "bg-green-800 text-white"
+              : "bg-green-100 text-green-800"
+          }`}
+        >
+          7
+        </div>
+        <div
+          onClick={updateLevelCount(9)}
+          className={`px-2 h-10 mx-1 cursor-pointer ${
+            levelCount === 9
+              ? "bg-green-800 text-white"
+              : "bg-green-100 text-green-800"
+          }`}
+        >
+          9
+        </div>
       </div>
     </div>
   );
