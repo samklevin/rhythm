@@ -16,17 +16,17 @@ const SongSettings = ({
 }) => {
   const updateDifficulty = (difficulty) => () => {
     setDifficulty(difficulty);
-    songRef.current = makeSong(resolution, difficulty, levelCount);
+    songRef.current = makeSong({ resolution, difficulty, levelCount });
   };
 
   const updateResolution = (resolution) => () => {
     setResolution(resolution);
-    songRef.current = makeSong(resolution, difficulty, levelCount);
+    songRef.current = makeSong({ resolution, difficulty, levelCount });
   };
 
   const updateLevelCount = (levelCount) => () => {
     setLevelCount(levelCount);
-    songRef.current = makeSong(resolution, difficulty, levelCount);
+    songRef.current = makeSong({ resolution, difficulty, levelCount });
   };
 
   return (

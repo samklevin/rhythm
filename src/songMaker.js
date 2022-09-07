@@ -59,6 +59,14 @@ const addTimeValues = (song) =>
     time: `${Math.floor(i / 16)}:${Math.floor((i % 16) / 4)}:${i % 4}`,
   }));
 
+export const getTheme = (resolution) => {
+  const songsAtResolution = SONGS.filter((s) => s.length === resolution);
+  if (!songsAtResolution.length) {
+    throw `resolution ${resolution} is not supported`;
+  }
+  return _.shuffle(songsAtResolution)[0];
+};
+
 const restsByResolutionAndDifficulty = {
   8: {
     0: 1,
@@ -83,6 +91,17 @@ const repeatProbabilityByDifficulty = {
 
 const MAX_LEVEL_REPEATS = 2;
 
+const nextTheme = (theme) => {
+  const randomSeed = _.random();
+  if (randomSeed < 0.33) {
+    return serializedNotes(theme);
+  } else if (randomSeed < 0.66) {
+    return _.reverse(serializedNotes(theme));
+  } else {
+    return _.shuffle(serializedNotes(theme));
+  }
+};
+
 export const makeSong = ({
   resolution = 8,
   difficulty = 0,
@@ -91,41 +110,26 @@ export const makeSong = ({
   const theme = getTheme(resolution);
   const restCount = restsByResolutionAndDifficulty[theme.length][difficulty];
   const shouldRepeat = repeatProbabilityByDifficulty[difficulty];
+
   let repeatCount = MAX_LEVEL_REPEATS;
 
-  const newOrRepeat = (lastLevel, nextLevel) => {
+  const nextLevel = () => {
     if (_.random() < shouldRepeat && repeatCount < MAX_LEVEL_REPEATS) {
       repeatCount += 1;
-      return lastLevel;
+      return previousLevel;
     }
     repeatCount = 0;
-    return nextLevel;
+    const next = insertRests(nextTheme(theme), restCount);
+    previousLevel = next;
+    return next;
   };
-
-  const notes = serializedNotes(theme);
 
   let playableLevels = [];
   let previousLevel = [];
 
-  const nextTheme = () => {
-    const randomSeed = _.random();
-    if (randomSeed < 0.33) {
-      return serializedNotes(theme);
-    } else if (randomSeed < 0.66) {
-      return _.reverse(serializedNotes(theme));
-    } else {
-      return _.shuffle(serializedNotes(theme));
-    }
-  };
-
-  const nextLevel = () => {
-    const next = insertRests(nextTheme(notes), restCount);
-    previousLevel = next;
-    return newOrRepeat(previousLevel, next);
-  };
-
   while (playableLevels.length < levelCount) {
     playableLevels.push(nextLevel());
+    console.log(playableLevels);
   }
 
   let fullSong = [
@@ -137,12 +141,4 @@ export const makeSong = ({
   fullSong = _.flattenDeep(fullSong);
   fullSong = addTimeValues(fullSong).map((n, i) => ({ ...n, position: i }));
   return fullSong;
-};
-
-export const getTheme = (resolution) => {
-  const songsAtResolution = SONGS.filter((s) => s.length === resolution);
-  if (!songsAtResolution.length) {
-    throw `resolution ${resolution} is not supported`;
-  }
-  return _.shuffle(songsAtResolution)[0];
 };
