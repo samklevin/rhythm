@@ -83,8 +83,8 @@ const repeatProbabilityByDifficulty = {
 
 const MAX_LEVEL_REPEATS = 2;
 
-export const makeSong = (song, difficulty, levelCount = 7) => {
-  const restCount = restsByResolutionAndDifficulty[song.length][difficulty];
+export const makeSong = ({ theme, difficulty, levelCount = 7 }) => {
+  const restCount = restsByResolutionAndDifficulty[theme.length][difficulty];
   const shouldRepeat = repeatProbabilityByDifficulty[difficulty];
   let repeatCount = MAX_LEVEL_REPEATS;
 
@@ -97,7 +97,7 @@ export const makeSong = (song, difficulty, levelCount = 7) => {
     return nextLevel;
   };
 
-  const notes = serializedNotes(song);
+  const notes = serializedNotes(theme);
 
   let playableLevels = [];
   let previousLevel = [];
@@ -105,11 +105,11 @@ export const makeSong = (song, difficulty, levelCount = 7) => {
   const nextTheme = () => {
     const randomSeed = _.random();
     if (randomSeed < 0.33) {
-      return serializedNotes(song);
+      return serializedNotes(theme);
     } else if (randomSeed < 0.66) {
-      return _.reverse(serializedNotes(song));
+      return _.reverse(serializedNotes(theme));
     } else {
-      return _.shuffle(serializedNotes(song));
+      return _.shuffle(serializedNotes(theme));
     }
   };
 
@@ -123,12 +123,10 @@ export const makeSong = (song, difficulty, levelCount = 7) => {
     playableLevels.push(nextLevel());
   }
 
-  console.log(playableLevels);
-
   let fullSong = [
-    serializedNotes(song),
+    serializedNotes(theme),
     playableLevels,
-    _.reverse(serializedNotes(song)),
+    _.reverse(serializedNotes(theme)),
   ];
 
   fullSong = _.flattenDeep(fullSong);
@@ -149,5 +147,5 @@ export const generateSong = (
   difficulty = 0,
   levelCount = 7
 ) => {
-  return makeSong(getTheme(resolution), difficulty, levelCount);
+  return makeSong({ theme: getTheme(resolution), difficulty, levelCount });
 };
