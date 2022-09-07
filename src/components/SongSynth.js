@@ -27,7 +27,6 @@ const SongSynth = ({
     const songSynth = new Tone.Synth().toDestination();
     synthRef.current = songSynth;
     songSynth.volume.value = -12;
-    console.log(songRef.current);
     songRef.current.forEach((n, i, a) => {
       scheduleCallback(n, i, a);
     });

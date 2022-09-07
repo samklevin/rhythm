@@ -81,13 +81,15 @@ const repeatProbabilityByDifficulty = {
   3: 0.1,
 };
 
-export const makeSong = (song, difficulty) => {
+const MAX_LEVEL_REPEATS = 2;
+
+export const makeSong = (song, difficulty, levelCount = 7) => {
   const restCount = restsByResolutionAndDifficulty[song.length][difficulty];
   const shouldRepeat = repeatProbabilityByDifficulty[difficulty];
-  let repeatCount = 0;
+  let repeatCount = MAX_LEVEL_REPEATS;
 
   const newOrRepeat = (lastLevel, nextLevel) => {
-    if (_.random() < shouldRepeat && repeatCount < 2) {
+    if (_.random() < shouldRepeat && repeatCount < MAX_LEVEL_REPEATS) {
       repeatCount += 1;
       return lastLevel;
     }
@@ -97,46 +99,39 @@ export const makeSong = (song, difficulty) => {
 
   const notes = serializedNotes(song);
 
-  const firstLevel = insertRests(_.reverse(serializedNotes(song)), restCount);
-  const secondLevel = newOrRepeat(
-    firstLevel,
-    insertRests(serializedNotes(song), restCount)
-  );
-  const thirdLevel = newOrRepeat(
-    secondLevel,
-    insertRests(_.shuffle(serializedNotes(song)), restCount)
-  );
-  const fourthLevel = newOrRepeat(
-    thirdLevel,
-    insertRests(serializedNotes(song), restCount)
-  );
-  const fifthLevel = newOrRepeat(
-    fourthLevel,
-    reverseRests(_.reverse([...notes]), fourthLevel)
-  );
+  let playableLevels = [];
+  let previousLevel = [];
 
-  const sixthLevel = newOrRepeat(
-    fifthLevel,
-    insertRests(serializedNotes(song), restCount)
-  );
+  const nextTheme = () => {
+    const randomSeed = _.random();
+    if (randomSeed < 0.33) {
+      return serializedNotes(song);
+    } else if (randomSeed < 0.66) {
+      return _.reverse(serializedNotes(song));
+    } else {
+      return _.shuffle(serializedNotes(song));
+    }
+  };
 
-  const seventhLevel = newOrRepeat(
-    sixthLevel,
-    reverseRests(_.shuffle(serializedNotes(song)), sixthLevel)
-  );
+  const nextLevel = () => {
+    const next = insertRests(nextTheme(notes), restCount);
+    previousLevel = next;
+    return newOrRepeat(previousLevel, next);
+  };
+
+  while (playableLevels.length < levelCount) {
+    playableLevels.push(nextLevel());
+  }
+
+  console.log(playableLevels);
 
   let fullSong = [
-    ...serializedNotes(song),
-    ...firstLevel,
-    ...secondLevel,
-    ...thirdLevel,
-    ...fourthLevel,
-    ...fifthLevel,
-    ...sixthLevel,
-    ...seventhLevel,
-    ..._.reverse(serializedNotes(song)),
+    serializedNotes(song),
+    playableLevels,
+    _.reverse(serializedNotes(song)),
   ];
 
+  fullSong = _.flattenDeep(fullSong);
   fullSong = addTimeValues(fullSong).map((n, i) => ({ ...n, position: i }));
   return fullSong;
 };

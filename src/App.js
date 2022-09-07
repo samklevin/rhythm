@@ -23,7 +23,7 @@ function App() {
   const [resolution, setResolution] = useState(8);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
-  const songRef = useRef(generateSong(resolution));
+  const songRef = useRef(generateSong(resolution, difficulty));
 
   const startPlaying = async () => {
     setIsPlaying(true);
