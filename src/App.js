@@ -10,10 +10,10 @@ import SongDisplay from "./components/SongDisplay";
 import queryString from "query-string";
 
 const difficultyToTempo = {
-  0: 56,
-  1: 61,
-  2: 66,
-  3: 69,
+  0: 50,
+  1: 54,
+  2: 58,
+  3: 62,
 };
 
 function App() {
