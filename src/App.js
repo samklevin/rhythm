@@ -27,10 +27,11 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [transportTime, setTransportTime] = useState(null);
   const [hits, setHits] = useState([]);
+  const [score, setScore] = useState(0);
   const [difficulty, setDifficulty] = useState(Number(difficultyFromURL));
   const [resolution, setResolution] = useState(resolutionFromURL);
   const [levelCount, setLevelCount] = useState(7);
-  const [tone, setTone] = useState(0);
+  const [tone, setTone] = useState(1);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
   const songRef = useRef(makeSong({ difficulty, resolution }));
@@ -47,6 +48,19 @@ function App() {
     setLockedAt(null);
     Tone.Transport.stop();
     setViewingResults(true);
+  };
+
+  const getScore = () => {
+    const restCount = songRef.current.filter((n) => !n.play);
+    const newScore = hits.length / restCount.length;
+    setScore(newScore);
+  };
+
+  const redirectToNextLevel = () => {
+    const currentLevel = urlParams.level || 0;
+    const nextLevel = Number(currentLevel) + 1;
+    window.location =
+      window.location.href.split("?")[0] + `?level=${nextLevel}`;
   };
 
   useEffect(() => {
@@ -66,6 +80,10 @@ function App() {
     }
   }, [transportTime]);
 
+  useEffect(() => {
+    getScore();
+  }, [viewingResults]);
+
   const playAgain = () => {
     window.location.reload();
   };
@@ -75,7 +93,7 @@ function App() {
       <header className="App-header">
         <h1 className="text-6xl text-white">Rhythm Game</h1>
         {viewingResults ? (
-          <div className="my-10 flex w-full justify-center">
+          <div className="my-10 flex w-full justify-center space-x-10">
             <button
               className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed"
               onClick={playAgain}
@@ -83,6 +101,14 @@ function App() {
             >
               Play again?
             </button>
+            {score > 0.8 && (
+              <button
+                onClick={redirectToNextLevel}
+                className="bg-fuchsia-700 text-white text-2xl p-4 translate-y-0 disabled:bg-fuchsia-200 disabled:cursor-not-allowed"
+              >
+                Next Level
+              </button>
+            )}
           </div>
         ) : (
           <SongSettings
