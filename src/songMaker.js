@@ -91,6 +91,13 @@ const repeatProbabilityByDifficulty = {
 
 const MAX_LEVEL_REPEATS = 2;
 
+const repeatRests = (prevLevel, nextLevel) => {
+  prevLevel.forEach((e, i) => {
+    nextLevel[i].play = e.play;
+  });
+  return nextLevel;
+};
+
 const nextTheme = (theme) => {
   const randomSeed = _.random();
   if (randomSeed < 0.33) {
@@ -116,7 +123,7 @@ export const makeSong = ({
   const nextLevel = () => {
     if (_.random() < shouldRepeat && repeatCount < MAX_LEVEL_REPEATS) {
       repeatCount += 1;
-      return previousLevel;
+      return repeatRests(previousLevel, nextTheme(theme));
     }
     repeatCount = 0;
     const next = insertRests(nextTheme(theme), restCount);

@@ -11,9 +11,9 @@ import queryString from "query-string";
 
 const difficultyToTempo = {
   0: 56,
-  1: 62,
-  2: 68,
-  3: 74,
+  1: 61,
+  2: 66,
+  3: 69,
 };
 
 function App() {
@@ -39,7 +39,7 @@ function App() {
   const startPlaying = async () => {
     setIsPlaying(true);
     await Tone.start();
-    Tone.Transport.bpm.value = difficultyToTempo[difficulty];
+    Tone.Transport.bpm.value = difficultyToTempo[difficulty] + resolution / 4;
     Tone.Transport.start();
   };
 
