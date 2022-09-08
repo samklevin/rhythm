@@ -18,6 +18,7 @@ const DisplayRow = ({ songSlice, isPlaying, hits, resolution }) =>
     if (note.play) {
       return (
         <div
+          data-test-id={`cell-${index}`}
           key={`note-${note.position}`}
           className={`mx-2 h-8 rounded ease-in ${
             widthFromResolution[resolution]
@@ -31,6 +32,7 @@ const DisplayRow = ({ songSlice, isPlaying, hits, resolution }) =>
     } else if (hits.includes(note.time)) {
       return (
         <div
+          data-test-id={`cell-${index}`}
           key={`note-${note.position}`}
           className={`mx-2 h-8 rounded ease-in bg-white animate-pulse ${widthFromResolution[resolution]}`}
         />
@@ -38,6 +40,7 @@ const DisplayRow = ({ songSlice, isPlaying, hits, resolution }) =>
     } else {
       return (
         <div
+          data-test-id={`cell-${index}`}
           key={`note-${note.position}`}
           className={`mx-2 h-8 rounded ease-in ${widthFromResolution[resolution]}`}
         />

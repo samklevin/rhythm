@@ -7,6 +7,7 @@ import PlayerSynth from "./components/PlayerSynth";
 import { sixteenthDuration } from "./musicUtils";
 import SongSettings from "./components/SongSettings";
 import SongDisplay from "./components/SongDisplay";
+import queryString from "query-string";
 
 const difficultyToTempo = {
   0: 56,
@@ -16,16 +17,23 @@ const difficultyToTempo = {
 };
 
 function App() {
+  const urlParams = queryString.parse(window.location.search);
+  let level = urlParams.level || 0;
+
+  level = Math.min(Number(level), 7);
+  const resolutionFromURL = (Math.floor(level / 4) + 1) * 8;
+  const difficultyFromURL = level % 4;
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [transportTime, setTransportTime] = useState(null);
   const [hits, setHits] = useState([]);
-  const [difficulty, setDifficulty] = useState(0);
-  const [resolution, setResolution] = useState(8);
+  const [difficulty, setDifficulty] = useState(Number(difficultyFromURL));
+  const [resolution, setResolution] = useState(resolutionFromURL);
   const [levelCount, setLevelCount] = useState(7);
   const [tone, setTone] = useState(0);
   const [viewingResults, setViewingResults] = useState(false);
   const [lockedAt, setLockedAt] = useState();
-  const songRef = useRef(makeSong(resolution, difficulty));
+  const songRef = useRef(makeSong({ difficulty, resolution }));
 
   const startPlaying = async () => {
     setIsPlaying(true);

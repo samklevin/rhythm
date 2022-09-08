@@ -129,7 +129,6 @@ export const makeSong = ({
 
   while (playableLevels.length < levelCount) {
     playableLevels.push(nextLevel());
-    console.log(playableLevels);
   }
 
   let fullSong = [
