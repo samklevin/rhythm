@@ -135,10 +135,7 @@ function App() {
       <SongSynth
         endSong={endSong}
         setTransportTime={setTransportTime}
-        resolution={resolution}
-        difficulty={difficulty}
         songRef={songRef}
-        levelCount={levelCount}
       />
       {isPlaying && (
         <PlayerSynth

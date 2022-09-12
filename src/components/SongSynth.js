@@ -4,10 +4,7 @@ import * as Tone from "tone";
 const SongSynth = ({
   endSong,
   setTransportTime,
-  difficulty,
-  resolution,
   songRef,
-  levelCount,
 }) => {
   const synthRef = useRef();
 
@@ -36,7 +33,7 @@ const SongSynth = ({
         songSynth.triggerAttackRelease(value.note, "16n", time);
       }
     }, songRef.current).start(0);
-  }, [resolution, difficulty, levelCount]);
+  }, [songRef.current]);
 
   return <></>;
 };
