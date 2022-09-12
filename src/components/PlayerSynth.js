@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as Tone from "tone";
 import { shiftUpTwoOctaves } from "../musicUtils";
 
@@ -11,18 +11,24 @@ const PlayerSynth = ({ lockedAt, setLockedAt, setHits, songRef, tone }) => {
     };
   });
 
-  const playerSynth = new Tone.PolySynth(Tone.Synth).toDestination();
+  const synthRef = useRef()
+
+  useEffect(() => {
+    if(!synthRef.current){
+      synthRef.current = new Tone.PolySynth(Tone.Synth).toDestination();
+    }
+  }, [songRef.current])
 
   const playWrongNote = (now) => {
-    playerSynth.triggerAttack("A3", now);
-    playerSynth.triggerAttack("Bb3", now);
-    playerSynth.triggerAttack("B3", now);
-    playerSynth.triggerRelease(["A3", "Bb3", "B3"], now + 0.1);
+    synthRef.current.triggerAttack("A3", now);
+    synthRef.current.triggerAttack("Bb3", now);
+    synthRef.current.triggerAttack("B3", now);
+    synthRef.current.triggerRelease(["A3", "Bb3", "B3"], now + 0.1);
   };
 
   const playHit = (now, note) => {
     const nextNote = tone === 0 ? shiftUpTwoOctaves(note) : note;
-    playerSynth.triggerAttackRelease(nextNote, "16n", now);
+    synthRef.current.triggerAttackRelease(nextNote, "16n", now);
   };
 
   const userKeyDown = (event) => {

@@ -8,19 +8,20 @@ const SongSynth = ({
 }) => {
   const synthRef = useRef();
 
+  const scheduleCallback = (n, i, a) => {
+    Tone.Transport.schedule(() => {
+      setTransportTime(n.time);
+      if (i === a.length - 1) {
+        endSong();
+      }
+    }, n.time);
+  };
+
   useEffect(() => {
     if (synthRef.current) {
       synthRef.current.dispose();
       Tone.Transport.cancel();
     }
-    const scheduleCallback = (n, i, a) => {
-      Tone.Transport.schedule(() => {
-        setTransportTime(n.time);
-        if (i === a.length - 1) {
-          endSong();
-        }
-      }, n.time);
-    };
 
     const songSynth = new Tone.Synth().toDestination();
     synthRef.current = songSynth;
